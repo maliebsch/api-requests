@@ -22,7 +22,7 @@ describe('Posts', () => {
     console.log(postsComponent.instance().getPostsAndUsers())
     expect(await postsComponent.instance().getPostsAndUsers()).toStrictEqual([
       mockPostData,
-      mockUserData,
+      mockUserData
     ])
   })
 
@@ -33,12 +33,12 @@ describe('Posts', () => {
       .instance()
       .convertIntoUpdatedPosts(mockPostData, mockUserData)
 
-    expect(postsComponent.instance().state.updatedPosts.length).toEqual(1)
+    expect(postsComponent.instance().state.updatedPosts.length).toEqual(12)
     expect(
-      postsComponent.instance().state.updatedPosts[0].post.userId,
+      postsComponent.instance().state.updatedPosts[0].post.userId
     ).toStrictEqual(mockUserData[0].id)
     expect(
-      postsComponent.instance().state.updatedPosts[0].username,
+      postsComponent.instance().state.updatedPosts[0].username
     ).toStrictEqual('testUser')
   })
 })

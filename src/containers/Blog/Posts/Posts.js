@@ -6,41 +6,41 @@ import Post from '../../../components/Post/Post'
 class Posts extends Component {
   state = {
     updatedPosts: [],
-    selectedPostId: null,
+    selectedPostId: null
   }
 
   componentDidMount() {
     this.getPostsAndUsers().then(
       axios.spread((...responses) => {
         this.convertIntoUpdatedPosts(responses[0].slice(0, 10), responses[1])
-      }),
+      })
     )
   }
 
   getPostsAndUsers() {
     return axios.all([
-      axios.get('https://jsonplaceholder.typicode.com/posts').then((resp) => {
+      axios.get('https:jsonplaceholder.typicode.com/posts').then((resp) => {
         return resp.data
       }),
-      axios.get('https://jsonplaceholder.typicode.com/users').then((resp) => {
+      axios.get('https:jsonplaceholder.typicode.com/users').then((resp) => {
         return resp.data
-      }),
+      })
     ])
   }
 
   convertIntoUpdatedPosts(posts, users) {
     const updatedPosts = []
 
-    posts.forEach((post) =>
+    posts.forEach((post) => {
       users.forEach((user) => {
         if (post.userId === user.id) {
           updatedPosts.push({
             post: post,
-            username: user.username,
+            username: user.username
           })
         }
-      }),
-    )
+      })
+    })
     this.setState({ updatedPosts })
   }
 
