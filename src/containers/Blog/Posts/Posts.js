@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
-import axios from 'axios'
 import { Link } from 'react-router-dom'
 import Post from '../../../components/Post/Post'
+import { fetchUsers, fetchPosts } from '../../../api'
 
 class Posts extends Component {
   state = {
@@ -9,23 +9,10 @@ class Posts extends Component {
     selectedPostId: null
   }
 
-  componentDidMount() {
-    this.getPostsAndUsers().then(
-      axios.spread((...responses) => {
-        this.convertIntoUpdatedPosts(responses[0].slice(0, 10), responses[1])
-      })
-    )
-  }
-
-  getPostsAndUsers() {
-    return axios.all([
-      axios.get('https:jsonplaceholder.typicode.com/posts').then((resp) => {
-        return resp.data
-      }),
-      axios.get('https:jsonplaceholder.typicode.com/users').then((resp) => {
-        return resp.data
-      })
-    ])
+  async componentDidMount() {
+    const posts = await fetchPosts()
+    const users = await fetchUsers()
+    this.convertIntoUpdatedPosts(posts.slice(0, 10), users)
   }
 
   convertIntoUpdatedPosts(posts, users) {

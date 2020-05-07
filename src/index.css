@@ -18,6 +18,10 @@ body {
 
 }
 
+.container {
+  margin: 20px auto;
+}
+
 .d-flex {
   display: flex;
   align-items: center;
