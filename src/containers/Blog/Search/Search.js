@@ -23,8 +23,12 @@ class Search extends Component {
       () => {
         if (this.state.query && this.state.query.length >= 1) {
           this.getData()
+          document.querySelector('.infoText').innerHTML = ''
         } else if (!this.state.query) {
-          return <p>Please enter a keyword...</p>
+          document.querySelector(
+            '.infoText'
+          ).innerHTML = `Please enter a keyword`
+          this.setState({ filteredUsers: [] })
         }
       }
     )
@@ -32,42 +36,39 @@ class Search extends Component {
 
   getData = () => {
     const { users } = this.state
+
+    let searchResultsByName = this.filterUsersByProperty(
+      users,
+      (user) => user.name
+    )
+
+    let searchResultsByUserName = this.filterUsersByProperty(
+      users,
+      (user) => user.username
+    )
+
+    this.setState({
+      filteredUsers: [...searchResultsByName, ...searchResultsByUserName]
+    })
+  }
+
+  filterUsersByProperty(users, getUserValue) {
+    let searchResults = []
     const query = this.state.query.toLowerCase()
-    let matchesName = this.getFilteredNames(users, query)
+    const regex = new RegExp(`^${query}`)
 
-    let matchesUsername = this.getFilteredUserNames(users, query)
-
-    this.setState({ filteredUsers: [...matchesName, ...matchesUsername] })
-  }
-
-  getFilteredNames(users, query) {
-    let matchesName = users.filter((user) => {
-      const regex = new RegExp(`^${query}`)
-      return user.name.toLowerCase().match(regex)
-    })
-
-    if (matchesName !== null) {
-      matchesName = matchesName.map((result) => {
-        return { displayUser: result.name, id: result.id }
+    users
+      .filter((user) => {
+        return getUserValue(user).toLowerCase().match(regex)
       })
-    }
+      .map((filteredUser) =>
+        searchResults.push({
+          displayUser: getUserValue(filteredUser),
+          id: filteredUser.id
+        })
+      )
 
-    return matchesName
-  }
-
-  getFilteredUserNames(users, query) {
-    let matchesUsername = users.filter((user) => {
-      const regex = new RegExp(`^${query}`)
-      return user.username.toLowerCase().match(regex)
-    })
-
-    if (matchesUsername !== null) {
-      matchesUsername = matchesUsername.map((result) => {
-        return { displayUser: result.username, id: result.id }
-      })
-    }
-
-    return matchesUsername
+    return searchResults
   }
 
   render() {
@@ -88,7 +89,8 @@ class Search extends Component {
             onChange={this.handleInputChange}
           />
         </form>
-        {<div>{resultsList}</div>}
+        <div className="infoText"></div>
+        <div>{resultsList}</div>
       </div>
     )
   }
