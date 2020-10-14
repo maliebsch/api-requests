@@ -1,9 +1,9 @@
-import React from 'react'
+import React, { lazy, Suspense } from 'react'
 import { Route, Switch, NavLink, Link } from 'react-router-dom'
-import Posts from './Posts/Posts'
-import FullPost from './FullPost/FullPost'
-import FullUser from './FullUser/FullUser'
-import Search from './Search/Search'
+const Posts = lazy(() => import('./Posts/Posts'))
+const FullPost = lazy(() => import('./FullPost/FullPost'))
+const FullUser = lazy(() => import('./FullUser/FullUser'))
+const Search = lazy(() => import('./Search/Search'))
 
 const Blog = () => {
   return (
@@ -30,12 +30,14 @@ const Blog = () => {
             </div>
           </div>
         </nav>
-        <Switch>
-          <Route exact path="/posts/:id" component={FullPost} />
-          <Route exact path="/users/:id" component={FullUser} />
-          <Route exact path="/search" component={Search} />
-          <Route exact path="/posts" component={Posts} />
-        </Switch>
+        <Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route exact path="/posts/:id" component={FullPost} />
+            <Route exact path="/users/:id" component={FullUser} />
+            <Route exact path="/search" component={Search} />
+            <Route exact path="/posts" component={Posts} />
+          </Switch>
+        </Suspense>
       </header>
     </div>
   )

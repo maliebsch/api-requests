@@ -14,12 +14,10 @@ class UserData extends Component {
     }
   }
   render() {
-    console.log(this.state)
     let userData = <p>Loading user data...</p>
 
     if (this.state.userData) {
       userData = this.state.userData
-      console.log(userData)
       return (
         <div>
           <h4>{userData[0].name}</h4>
